@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reaction Time Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 600px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .instructions {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .game-area {
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .start-screen, .waiting-screen, .click-screen, .result-screen, .final-screen, .valentine-screen {
+            display: none;
+        }
+
+        .start-screen.active, .waiting-screen.active, .click-screen.active, .result-screen.active, .final-screen.active, .valentine-screen.active {
+            display: block;
+        }
+
+        .btn {
+            padding: 20px 40px;
+            font-size: 1.3rem;
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .waiting-screen {
+            background: #e74c3c;
+            padding: 60px;
+            border-radius: 20px;
+            font-size: 1.5rem;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        .click-screen {
+            background: #27ae60;
+            padding: 60px;
+            border-radius: 20px;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .valentine-screen {
+            background: #27ae60;
+            padding: 40px;
+            border-radius: 20px;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .valentine-question {
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
+
+        .quick-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            position: relative;
+            min-height: 80px;
+            align-items: center;
+        }
+
+        .quick-btn {
+            padding: 20px 50px;
+            font-size: 1.5rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .yes-quick {
+            background: #ff1744;
+            color: white;
+        }
+
+        .yes-quick:hover {
+            background: #ff4569;
+            transform: scale(1.05);
+        }
+
+        .no-quick {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            position: absolute;
+            transition: all 0.15s ease-out;
+        }
+
+        .time-display {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 30px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .round-info {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
+        .average-time {
+            font-size: 1.3rem;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .hearts {
+            position: absolute;
+            pointer-events: none;
+            font-size: 3rem;
+            animation: floatUp 2s ease-out forwards;
+        }
+
+        @keyframes floatUp {
+            to {
+                transform: translateY(-200px);
+                opacity: 0;
+            }
+        }
+
+        .celebration {
+            font-size: 1.5rem;
+            margin-top: 30px;
+            animation: fadeInScale 0.5s ease-out 0.3s both;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .warning-text {
+            font-size: 1rem;
+            margin-top: 15px;
+            opacity: 0.8;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50%, 100% { opacity: 0.8; }
+            25%, 75% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚡ Reaction Time Test</h1>
+        <p class="instructions">Test your reflexes! Click as fast as you can when the screen turns green. Your average speed will be calculated across 5 times</p>
+        
+        <div class="game-area">
+            <!-- Start Screen -->
+            <div class="start-screen active">
+                <p style="margin-bottom: 20px;">Ready to test your reaction time?</p>
+                <button class="btn" onclick="startGame()">Start Game</button>
+            </div>
+
+            <!-- Waiting Screen -->
+            <div class="waiting-screen">
+                <p>Wait for GREEN...</p>
+            </div>
+
+            <!-- Normal Click Screen -->
+            <div class="click-screen" onclick="recordTime()">
+                <p>CLICK NOW!</p>
+            </div>
+
+            <!-- Valentine Click Screen (Round 5) -->
+            <div class="valentine-screen" id="valentineScreen">
+                <div class="valentine-question">Will you be my Valentine? 💕</div>
+                <p class="warning-text">⚡ CLICK FAST! ⚡</p>
+                <div class="quick-buttons">
+                    <button class="quick-btn yes-quick" onclick="clickedYes()">YES! ❤️</button>
+                    <button class="quick-btn no-quick" id="noQuickBtn" onmouseover="dodgeNo(event)" ontouchstart="dodgeNo(event)">No</button>
+                </div>
+            </div>
+
+            <!-- Result Screen -->
+            <div class="result-screen">
+                <p class="round-info">Round <span id="roundNum">1</span> of 5</p>
+                <p>Your reaction time:</p>
+                <div class="time-display"><span id="reactionTime">0</span> ms</div>
+                <div class="average-time">Average: <span id="avgTime">0</span> ms</div>
+                <button class="btn" onclick="nextRound()" style="margin-top: 30px;">Next Round</button>
+            </div>
+
+            <!-- Final Screen -->
+            <div class="final-screen">
+                <p style="font-size: 1.3rem; margin-bottom: 20px;">Game Complete!</p>
+                <div class="time-display">Average: <span id="finalAvg">0</span> ms</div>
+                <div class="celebration" id="celebration"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let round = 0;
+        let times = [];
+        let startTime;
+        let waitTimeout;
+        let valentineStartTime;
+
+        const screens = {
+            start: document.querySelector('.start-screen'),
+            waiting: document.querySelector('.waiting-screen'),
+            click: document.querySelector('.click-screen'),
+            valentine: document.getElementById('valentineScreen'),
+            result: document.querySelector('.result-screen'),
+            final: document.querySelector('.final-screen')
+        };
+
+        function showScreen(screenName) {
+            Object.values(screens).forEach(screen => screen.classList.remove('active'));
+            screens[screenName].classList.add('active');
+        }
+
+        function startGame() {
+            round = 0;
+            times = [];
+            nextRound();
+        }
+
+        function nextRound() {
+            if (round >= 5) {
+                showFinalResults();
+                return;
+            }
+
+            round++;
+            document.getElementById('roundNum').textContent = round;
+            
+            showScreen('waiting');
+            
+            // Random delay between 1-4 seconds
+            const delay = 1000 + Math.random() * 3000;
+            
+            waitTimeout = setTimeout(() => {
+                startTime = Date.now();
+                
+                // Round 5 is the Valentine question!
+                if (round === 5) {
+                    valentineStartTime = Date.now();
+                    showScreen('valentine');
+                } else {
+                    showScreen('click');
+                }
+            }, delay);
+        }
+
+        function recordTime() {
+            const reactionTime = Date.now() - startTime;
+            times.push(reactionTime);
+            
+            document.getElementById('reactionTime').textContent = reactionTime;
+            
+            const average = Math.round(times.reduce((a, b) => a + b, 0) / times.length);
+            document.getElementById('avgTime').textContent = average;
+            
+            showScreen('result');
+        }
+
+        function clickedYes() {
+            const reactionTime = Date.now() - valentineStartTime;
+            times.push(reactionTime);
+            
+            // Show special celebration
+            showScreen('final');
+            const celebration = document.getElementById('celebration');
+            celebration.innerHTML = `
+                <p style="font-size: 2rem; margin-bottom: 20px;">🎉 YOU SAID YES! 🎉</p>
+                <p style="font-size: 1.2rem; margin-bottom: 15px;">Reaction time: ${reactionTime}ms</p>
+                <p style="font-size: 1.5rem;">I knew you wouldn't hesitate to choose me ❤️</p>
+            `;
+            
+            // Create floating hearts
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'hearts';
+                    heart.textContent = ['❤️', '💕', '💖', '💗', '💝'][Math.floor(Math.random() * 5)];
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.top = Math.random() * 100 + '%';
+                    document.body.appendChild(heart);
+                    setTimeout(() => heart.remove(), 2000);
+                }, i * 100);
+            }
+        }
+
+        function dodgeNo(event) {
+            event.preventDefault();
+            const noBtn = document.getElementById('noQuickBtn');
+            const container = document.querySelector('.quick-buttons');
+            const containerRect = container.getBoundingClientRect();
+            
+            // Random position within container
+            const maxX = containerRect.width - noBtn.offsetWidth - 40;
+            const maxY = containerRect.height - noBtn.offsetHeight - 40;
+            
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+            
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+            
+            // Make Yes button bigger and more obvious
+            const yesBtn = document.querySelector('.yes-quick');
+            yesBtn.style.transform = 'scale(1.15)';
+            setTimeout(() => {
+                yesBtn.style.transform = 'scale(1)';
+            }, 300);
+        }
+
+        function showFinalResults() {
+            const average = Math.round(times.reduce((a, b) => a + b, 0) / times.length);
+            document.getElementById('finalAvg').textContent = average;
+            
+            showScreen('final');
+            const celebration = document.getElementById('celebration');
+            celebration.innerHTML = `
+                <p style="font-size: 1.2rem; margin-top: 20px;">Great reflexes! 🎯</p>
+            `;
+        }
+    </script>
+</body>
+</html>
