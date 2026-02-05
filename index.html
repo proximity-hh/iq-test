@@ -224,7 +224,7 @@
 <body>
     <div class="container">
         <h1>⚡ Reaction Time Challenge</h1>
-        <p class="instructions">Test your reflexes! Click as fast as you can when the screen turns green.</p>
+        <p class="instructions">Test your reflexes! Click as fast as you can when the screen turns green. Your average speed will be calculated across 5 rounds.</p>
         
         <div class="game-area">
             <!-- Start Screen -->
@@ -244,13 +244,11 @@
             </div>
 
             <!-- Valentine Click Screen (Round 5) -->
-            <div class="valentine-screen" id="valentineScreen">
+            <div class="valentine-screen click-screen" id="valentineScreen" onclick="clickedYes()">
                 <div class="valentine-question">Will you be my Valentine? 💕</div>
-                <p class="warning-text">CLICK NOW!</p>
-                <div class="quick-buttons">
-                    <button class="quick-btn yes-quick" onclick="clickedYes()">Yes</button>
-                </div>
+                <p>YES DUH!</p>
             </div>
+
 
             <!-- Result Screen -->
             <div class="result-screen">
@@ -346,7 +344,7 @@
             celebration.innerHTML = `
                 <p style="font-size: 2rem; margin-bottom: 20px;">🎉 YOU SAID YES! 🎉</p>
                 <p style="font-size: 1.2rem; margin-bottom: 15px;">Reaction time: ${reactionTime}ms</p>
-                <p style="font-size: 1.5rem;">Can't wait for Valentine's Day! ❤️</p>
+                <p style="font-size: 1.5rem;">I knew you wouldn't hesitate Meshana! ❤️</p>
             `;
             
             // Create floating hearts
