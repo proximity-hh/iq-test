@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reaction Time Test</title>
+    <title>Reaction Time Challenge</title>
     <style>
         * {
             margin: 0;
@@ -106,50 +106,51 @@
 
         .valentine-screen {
             background: #27ae60;
-            padding: 40px;
+            padding: 60px;
             border-radius: 20px;
             font-size: 1.8rem;
             font-weight: bold;
+            cursor: pointer;
         }
 
         .valentine-question {
             font-size: 2rem;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
         .quick-buttons {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             justify-content: center;
             flex-wrap: wrap;
             position: relative;
-            min-height: 80px;
+            min-height: 60px;
             align-items: center;
         }
 
         .quick-btn {
-            padding: 20px 50px;
-            font-size: 1.5rem;
+            padding: 8px 20px;
+            font-size: 0.9rem;
             border: none;
-            border-radius: 50px;
+            border-radius: 8px;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: normal;
             transition: all 0.2s;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
         .yes-quick {
-            background: #ff1744;
+            background: rgba(255, 255, 255, 0.25);
             color: white;
         }
 
         .yes-quick:hover {
-            background: #ff4569;
+            background: rgba(255, 255, 255, 0.35);
             transform: scale(1.05);
         }
 
         .no-quick {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.25);
             color: white;
             position: absolute;
             transition: all 0.15s ease-out;
@@ -222,8 +223,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>⚡ Reaction Time Test</h1>
-        <p class="instructions">Test your reflexes! Click as fast as you can when the screen turns green. Your average speed will be calculated across 5 times</p>
+        <h1>⚡ Reaction Time Challenge</h1>
+        <p class="instructions">Test your reflexes! Click as fast as you can when the screen turns green.</p>
         
         <div class="game-area">
             <!-- Start Screen -->
@@ -247,7 +248,7 @@
                 <div class="valentine-question">Will you be my Valentine? 💕</div>
                 <p class="warning-text">⚡ CLICK FAST! ⚡</p>
                 <div class="quick-buttons">
-                    <button class="quick-btn yes-quick" onclick="clickedYes()">YES! ❤️</button>
+                    <button class="quick-btn yes-quick" onclick="clickedYes()">Yes</button>
                     <button class="quick-btn no-quick" id="noQuickBtn" onmouseover="dodgeNo(event)" ontouchstart="dodgeNo(event)">No</button>
                 </div>
             </div>
@@ -346,7 +347,7 @@
             celebration.innerHTML = `
                 <p style="font-size: 2rem; margin-bottom: 20px;">🎉 YOU SAID YES! 🎉</p>
                 <p style="font-size: 1.2rem; margin-bottom: 15px;">Reaction time: ${reactionTime}ms</p>
-                <p style="font-size: 1.5rem;">I knew you wouldn't hesitate to choose me ❤️</p>
+                <p style="font-size: 1.5rem;">Can't wait for Valentine's Day! ❤️</p>
             `;
             
             // Create floating hearts
